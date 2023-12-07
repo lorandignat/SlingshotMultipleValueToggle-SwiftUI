@@ -24,26 +24,46 @@ import SwiftUI
 
 public struct SlingshotMultipleValueToggle: View {
   
-  // MARK: - Public properties (with default values)
+  // MARK: - Private properties changable on init
   
-  @Binding var selectedValue: UInt
+  @Binding private var selectedValue: UInt
   
-  public var backgroundColor: Color = Color(red: 0.8, green: 0.8, blue: 0.9).opacity(0.3)
-  public var backgrondShadowRadius: CGFloat = 10
+  private var backgroundColor: Color
+  private var backgrondShadowRadius: CGFloat
   
-  public var icons: [Image] = [Image(systemName: "1.circle"), Image(systemName: "2.circle"), Image(systemName: "3.circle")]
-  public var iconSelectedColor: Color = .black.opacity(0.5)
-  public var iconDefaultColor: Color = .black.opacity(0.3)
+  private var icons: [Image]
+  private var iconSelectedColor: Color
+  private var iconDefaultColor: Color
   
-  public var selectionFillColor: Color = .white.opacity(0.5)
+  private var selectionFillColor: Color
   
-  // MARK: - Private properties
+  // MARK: - Private properties used internally
   
   @State private var dragDistance: CGFloat = 0.0
-  @State private var animationStart: Date = Date()
   @State private var animatedValue: UInt = 0
   
   private let iconSizeDifference = 4.0
+  
+  // MARK: - Public initializer
+  
+  public init(selectedValue: Binding<UInt>,
+              backgroundColor: Color = Color(red: 0.8, green: 0.8, blue: 0.9).opacity(0.3),
+              backgrondShadowRadius: CGFloat = 10.0,
+              icons: [Image] = [Image(systemName: "1.circle"), Image(systemName: "2.circle"), Image(systemName: "3.circle")],
+              iconSelectedColor: Color = .black.opacity(0.5),
+              iconDefaultColor: Color = .black.opacity(0.3),
+              selectionFillColor: Color = .white.opacity(0.5)) {
+    
+    self._selectedValue = selectedValue
+    self.animatedValue = selectedValue.wrappedValue
+    
+    self.backgroundColor = backgroundColor
+    self.backgrondShadowRadius = backgrondShadowRadius
+    self.icons = icons
+    self.iconSelectedColor = iconSelectedColor
+    self.iconDefaultColor = iconDefaultColor
+    self.selectionFillColor = selectionFillColor
+  }
   
   // MARK: - UI
   
@@ -62,14 +82,14 @@ public struct SlingshotMultipleValueToggle: View {
           animatedValue = value
         }
       })
-      .frame(minWidth: geometry.size.height * CGFloat((icons.count * 3 / 2)), minHeight: 30)
+      .frame(minWidth: geometry.size.height * CGFloat((icons.count * 3 / 2)), minHeight: 30, maxHeight: 100)
       .position(x: geometry.size.width / 2,
                 y: geometry.size.height / 2)
     }
   }
   
   @ViewBuilder
-  func selectionCircle(for geometry: GeometryProxy) -> some View {
+  private func selectionCircle(for geometry: GeometryProxy) -> some View {
     if icons.count <= 1 {
       EmptyView()
     } else {
