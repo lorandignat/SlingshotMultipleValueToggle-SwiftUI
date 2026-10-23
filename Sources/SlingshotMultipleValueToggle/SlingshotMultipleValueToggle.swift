@@ -55,14 +55,13 @@ public struct SlingshotMultipleValueToggle: View {
               selectionFillColor: Color = .white.opacity(0.5)) {
     
     self._selectedValue = selectedValue
-    self.animatedValue = selectedValue.wrappedValue
-    
     self.backgroundColor = backgroundColor
     self.backgrondShadowRadius = backgrondShadowRadius
     self.icons = icons
     self.iconSelectedColor = iconSelectedColor
     self.iconDefaultColor = iconDefaultColor
     self.selectionFillColor = selectionFillColor
+    self.animatedValue = selectedValue.wrappedValue
   }
   
   // MARK: - UI
